@@ -1,0 +1,120 @@
+#include <iostream>
+using namespace std;
+
+class MinHeap {
+private:
+    int heap[100];
+    int size;
+
+    void heapifyUp(int index) {
+        while (index > 0) {
+            int parent = (index - 1) / 2;
+
+            if (heap[parent] <= heap[index])
+                break;
+
+            swap(heap[parent], heap[index]);
+            index = parent;
+        }
+    }
+
+    void heapifyDown(int index) {
+        while (true) {
+            int left = 2 * index + 1;
+            int right = 2 * index + 2;
+            int smallest = index;
+
+            if (left < size && heap[left] < heap[smallest])
+                smallest = left;
+
+            if (right < size && heap[right] < heap[smallest])
+                smallest = right;
+
+            if (smallest == index)
+                break;
+
+            swap(heap[index], heap[smallest]);
+            index = smallest;
+        }
+    }
+
+public:
+    MinHeap() {
+        size = 0;
+    }
+
+    void insert(int value) {
+        heap[size] = value;
+        heapifyUp(size);
+        size++;
+    }
+
+    void removeMin() {
+        if (size == 0) {
+            cout << "Heap is empty.\n";
+            return;
+        }
+
+        cout << "Removed minimum: " << heap[0] << endl;
+
+        heap[0] = heap[size - 1];
+        size--;
+
+        if (size > 0)
+            heapifyDown(0);
+    }
+
+    void display() {
+        if (size == 0) {
+            cout << "Heap is empty.\n";
+            return;
+        }
+
+        cout << "Min Heap: ";
+
+        for (int i = 0; i < size; i++)
+            cout << heap[i] << " ";
+
+        cout << endl;
+    }
+};
+
+int main() {
+    MinHeap heap;
+    int choice, value;
+
+    do {
+        cout << "\n===== Min Heap =====\n";
+        cout << "1. Insert\n";
+        cout << "2. Remove Minimum\n";
+        cout << "3. Display\n";
+        cout << "4. Exit\n";
+        cout << "Enter choice: ";
+        cin >> choice;
+
+        switch (choice) {
+            case 1:
+                cout << "Enter value: ";
+                cin >> value;
+                heap.insert(value);
+                break;
+
+            case 2:
+                heap.removeMin();
+                break;
+
+            case 3:
+                heap.display();
+                break;
+
+            case 4:
+                cout << "Program terminated.\n";
+                break;
+
+            default:
+                cout << "Invalid choice.\n";
+        }
+    } while (choice != 4);
+
+    return 0;
+}
